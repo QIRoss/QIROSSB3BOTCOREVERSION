@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using System.Timers;
 using System.IO;
+// using Microsoft.Azure.WebJobs;
+// using Microsoft.Extensions.Logging;
 
 namespace B3BOTCoreVersion
 {
@@ -38,6 +40,7 @@ namespace B3BOTCoreVersion
             var connection = new Api(arg[0], float.Parse(arg[1]), float.Parse(arg[2]), apiUrl);
             var mail = new Mail(host, user, password, from, to, subject, defaultBody + '\n' + '\n');
             
+            
             void OnTimedEvent(Object source, ElapsedEventArgs e)
             {
                 Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
@@ -45,16 +48,20 @@ namespace B3BOTCoreVersion
                 if (date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday
                                                          && date.Hour > 10 && date.Hour < 17)
                 {
-                    int result = connection.GetPrice();
-                    if (result != 0)
-                    {
-                        if (result < 0)
-                            mail.body += onBuying + arg[0];
-                        else
-                            mail.body += onSelling + arg[0];
-                        mail.SendMail();
+            // [FunctionName("TimerTriggerCSharp")]
+            // void Run([TimerTrigger("0 */5 10-17 * * 1-5")]TimerInfo myTimer, ILogger log)
+                    // {
+                        int result = connection.GetPrice();
+                        if (result != 0)
+                        {
+                            if (result < 0)
+                                mail.body += onBuying + arg[0];
+                            else
+                                mail.body += onSelling + arg[0];
+                            mail.SendMail();
+                        }
                     }
-                }
+            // }
             }
 
             _aTimer = new Timer {Interval = 300000};
