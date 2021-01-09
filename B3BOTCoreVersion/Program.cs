@@ -57,7 +57,7 @@ namespace B3BOTCoreVersion
                 }
             }
 
-            _aTimer = new Timer {Interval = 30000};
+            _aTimer = new Timer {Interval = 300000};
             _aTimer.Elapsed += OnTimedEvent;
             _aTimer.AutoReset = true;
             _aTimer.Enabled = true;
